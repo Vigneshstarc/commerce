@@ -1,0 +1,6 @@
+{
+  "provider": "vtex",
+  "features": {
+    "wishlist": false
+  }
+}
