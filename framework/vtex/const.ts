@@ -4,7 +4,9 @@ export const VTEX_CHECKOUT_URL_COOKIE = 'vtex_checkoutUrl'
 
 export const VTEX_CUSTOMER_TOKEN_COOKIE = 'vtex_customerToken'
 
-export const STORE_DOMAIN = process.env.NEXT_PUBLIC_VTEX_STORE_DOMAIN
+export const VTEX_ACCOUNT = process.env.NEXT_PUBLIC_VTEX_ACCOUNT
+
+export const STORE_DOMAIN = `${VTEX_ACCOUNT}.myvtex.com`
 
 export const VTEX_COOKIE_EXPIRE = 30
 

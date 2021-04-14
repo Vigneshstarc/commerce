@@ -3,6 +3,6 @@ const commerce = require('./commerce.config.json')
 module.exports = {
   commerce,
   images: {
-    domains: ['fashioneurope.vteximg.com.br'],
+    domains: [`${process.env.NEXT_PUBLIC_VTEX_ACCOUNT}.vteximg.com.br`],
   },
 }
