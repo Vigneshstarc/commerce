@@ -30,7 +30,8 @@ const checkoutApi: VtexApiHandler<any> = async (req, res, config) => {
         },
       })
     } catch (error) {
-      console.error(error)
+      // Not implemented yet
+      // console.error(error)
     }
   }
 
