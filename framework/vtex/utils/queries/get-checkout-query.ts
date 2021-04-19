@@ -23,6 +23,12 @@ export const checkoutDetailsFragment = `
     countryCode
     currencyCode
     currencySymbol
+    currencyFormatInfo {
+      currencyDecimalDigits
+      currencyDecimalSeparator
+      currencyGroupSeparator
+      startsWithCurrencySymbol
+    }
   }
 `
 
