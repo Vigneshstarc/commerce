@@ -16,8 +16,15 @@ import type { Cart, LineItem } from '../types'
 const money = ({ amount, currencyCode }: MoneyV2) => {
   return {
     value: +amount,
-    currencyCode,
+    currencyCode: 'GBP',
   }
+}
+
+const formatCartPrice = (price: number, decimalDigits = 2): number => {
+  let stringPrice = price
+    .toString()
+    .substring(0, price.toString().length - decimalDigits)
+  return parseInt(stringPrice)
 }
 
 const normalizeProductOption = ({
@@ -114,9 +121,9 @@ export function normalizeCart(checkout: any): Cart {
     },
     taxesIncluded: true,
     lineItems: checkout.items?.map(normalizeLineItem),
-    lineItemsSubtotalPrice: +checkout.value,
-    subtotalPrice: +checkout.value,
-    totalPrice: checkout.value,
+    lineItemsSubtotalPrice: formatCartPrice(+checkout.value),
+    subtotalPrice: formatCartPrice(+checkout.value),
+    totalPrice: formatCartPrice(checkout.value),
     discounts: [],
   }
 }
@@ -137,8 +144,8 @@ function normalizeLineItem(item: any, index: number): LineItem {
         url: item?.imageUrls?.at3x,
       },
       requiresShipping: item?.requiresShipping ?? false,
-      price: item?.price,
-      listPrice: item?.listPrice,
+      price: formatCartPrice(item?.price),
+      listPrice: formatCartPrice(item?.listPrice),
     },
     path: item?.detailUrl?.substring(1, item?.detailUrl?.length - 1),
     discounts: [],

@@ -37,7 +37,7 @@ export class Config {
 }
 
 const config = new Config({
-  locale: 'en-US',
+  locale: 'en-GB',
   commerceUrl: API_URL,
   apiToken: '',
   cartCookie: VTEX_CHECKOUT_ID_COOKIE,
