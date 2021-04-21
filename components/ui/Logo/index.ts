@@ -1,1 +1,1 @@
-export { default } from './Logo'
+export { LogoVercel, LogoVtex } from './Logo'

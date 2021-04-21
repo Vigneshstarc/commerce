@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import type { Page } from '@framework/common/get-all-pages'
 import getSlug from '@lib/get-slug'
-import { Github, Vercel } from '@components/icons'
-import { Logo, Container } from '@components/ui'
+import { Github, Vercel, Vtex } from '@components/icons'
+import { LogoVtex, Container } from '@components/ui'
 import { I18nWidget } from '@components/common'
 import s from './Footer.module.css'
 
@@ -28,10 +28,11 @@ const Footer: FC<Props> = ({ className, pages }) => {
           <div className="col-span-1 lg:col-span-2">
             <Link href="/">
               <a className="flex flex-initial items-center font-bold md:mr-24">
-                <span className="rounded-full border border-gray-700 mr-2">
-                  <Logo />
+                {/* <span className="rounded-full border border-gray-700 mr-2">
+                  <LogoVercel />
                 </span>
-                <span>ACME</span>
+                <span>ACME</span> */}
+                <LogoVtex width="64" />
               </a>
             </Link>
           </div>
@@ -86,7 +87,7 @@ const Footer: FC<Props> = ({ className, pages }) => {
             <div className="flex space-x-6 items-center h-10">
               <a
                 aria-label="Github Repository"
-                href="https://github.com/vercel/commerce"
+                href="https://github.com/ddon-90/commerce"
                 className={s.link}
               >
                 <Github />
@@ -97,21 +98,25 @@ const Footer: FC<Props> = ({ className, pages }) => {
         </div>
         <div className="py-12 flex flex-col md:flex-row justify-between items-center space-y-4">
           <div>
-            <span>&copy; 2020 ACME, Inc. All rights reserved.</span>
+            <span>&copy; 2021 VTEX, All rights reserved.</span>
           </div>
           <div className="flex items-center text-primary">
             <span className="text-primary">Crafted by</span>
             <a
               rel="noopener"
-              href="https://vercel.com"
-              aria-label="Vercel.com Link"
+              href="https://vtex.com"
+              aria-label="Vtex.com Link"
               target="_blank"
               className="text-primary"
             >
-              <Vercel
-                className="inline-block h-6 ml-4 text-primary"
-                alt="Vercel.com Logo"
+              <Vtex
+                className="inline-block h-10 ml-4 text-primary"
+                alt="Vtex.com Logo"
               />
+              {/* <Vercel
+                className="inline-block h-10 text-primary"
+                alt="Vercel.com Logo"
+              /> */}
             </a>
           </div>
         </div>

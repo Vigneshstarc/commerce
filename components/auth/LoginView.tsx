@@ -1,5 +1,5 @@
 import { FC, useEffect, useState, useCallback } from 'react'
-import { Logo, Button, Input } from '@components/ui'
+import { LogoVtex, Button, Input } from '@components/ui'
 import useLogin from '@framework/auth/use-login'
 import { useUI } from '@components/ui/context'
 import { validate } from 'email-validator'
@@ -61,7 +61,7 @@ const LoginView: FC<Props> = () => {
       className="w-80 flex flex-col justify-between p-3"
     >
       <div className="flex justify-center pb-12 ">
-        <Logo width="64px" height="64px" />
+        <LogoVtex />
       </div>
       <div className="flex flex-col space-y-3">
         {message && (
