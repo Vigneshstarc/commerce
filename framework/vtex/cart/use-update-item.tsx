@@ -13,7 +13,7 @@ import useUpdateItem, {
 import useCart from './use-cart'
 import { handler as removeItemHandler } from './use-remove-item'
 import type { Cart, LineItem, UpdateCartItemBody } from '../types'
-import { checkoutToCart } from './utils'
+import { checkoutToCart } from '../utils'
 import { getCheckoutId, checkoutLineItemUpdateMutation } from '../utils'
 import { Mutation, MutationCheckoutLineItemsUpdateArgs } from '../schema'
 
@@ -31,13 +31,16 @@ export const handler = {
     input: { itemId, item },
     options,
     fetch,
-  }: HookFetcherContext<UpdateCartItemBody>) {
+  }: HookFetcherContext<any>) {
     if (Number.isInteger(item.quantity)) {
       // Also allow the update hook to remove an item if the quantity is lower than 1
       if (item.quantity! < 1) {
         return removeItemHandler.fetcher({
           options: removeItemHandler.fetchOptions,
-          input: { itemId },
+          input: {
+            itemId,
+            cartIndex: item.cartIndex,
+          },
           fetch,
         })
       }
@@ -46,23 +49,21 @@ export const handler = {
         message: 'The item quantity has to be a valid integer',
       })
     }
-    const { checkoutLineItemsUpdate } = await fetch<
-      Mutation,
-      MutationCheckoutLineItemsUpdateArgs
-    >({
+    const data = await fetch<any, MutationCheckoutLineItemsUpdateArgs>({
       ...options,
       variables: {
-        checkoutId: getCheckoutId(),
-        lineItems: [
+        orderFormId: getCheckoutId(),
+        orderItems: [
           {
-            id: itemId,
+            id: parseInt(itemId),
             quantity: item.quantity,
+            index: item.cartIndex,
           },
         ],
       },
     })
-
-    return checkoutToCart(checkoutLineItemsUpdate)
+    let checkout = data.updateItems
+    return checkoutToCart({ checkout })
   },
   useHook: ({
     fetch,
@@ -82,7 +83,9 @@ export const handler = {
         const itemId = input.id ?? item?.id
         const productId = input.productId ?? item?.productId
         const variantId = input.productId ?? item?.variantId
-        if (!itemId || !productId || !variantId) {
+        const cartIndex = input.cartIndex ?? item?.cartIndex
+
+        if (!itemId || !productId || !variantId || cartIndex == undefined) {
           throw new ValidationError({
             message: 'Invalid input used for this operation',
           })
@@ -93,6 +96,7 @@ export const handler = {
             item: {
               productId,
               variantId,
+              cartIndex,
               quantity: input.quantity,
             },
             itemId,

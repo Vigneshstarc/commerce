@@ -16,8 +16,15 @@ import type { Cart, LineItem } from '../types'
 const money = ({ amount, currencyCode }: MoneyV2) => {
   return {
     value: +amount,
-    currencyCode,
+    currencyCode: 'GBP',
   }
+}
+
+const formatCartPrice = (price: number, decimalDigits = 2): number => {
+  let stringPrice = price
+    .toString()
+    .substring(0, price.toString().length - decimalDigits)
+  return parseInt(stringPrice)
 }
 
 const normalizeProductOption = ({
@@ -103,49 +110,50 @@ export function normalizeProduct(productNode: VtexProduct): Product {
   return product
 }
 
-export function normalizeCart(checkout: Checkout): Cart {
+export function normalizeCart(checkout: any): Cart {
   return {
     id: checkout.id,
     customerId: '',
     email: '',
-    createdAt: checkout.createdAt,
+    createdAt: '',
     currency: {
-      code: checkout.totalPriceV2?.currencyCode,
+      code: checkout?.storePreferencesData?.currencyCode,
     },
-    taxesIncluded: checkout.taxesIncluded,
-    lineItems: checkout.lineItems?.edges.map(normalizeLineItem),
-    lineItemsSubtotalPrice: +checkout.subtotalPriceV2?.amount,
-    subtotalPrice: +checkout.subtotalPriceV2?.amount,
-    totalPrice: checkout.totalPriceV2?.amount,
+    taxesIncluded: true,
+    lineItems: checkout.items?.map(normalizeLineItem),
+    lineItemsSubtotalPrice: formatCartPrice(+checkout.value),
+    subtotalPrice: formatCartPrice(+checkout.value),
+    totalPrice: formatCartPrice(checkout.value),
     discounts: [],
   }
 }
 
-function normalizeLineItem({
-  node: { id, title, variant, quantity },
-}: CheckoutLineItemEdge): LineItem {
+function normalizeLineItem(item: any, index: number): LineItem {
   return {
-    id,
-    variantId: String(variant?.id),
-    productId: String(variant?.id),
-    name: `${title}`,
-    quantity,
+    cartIndex: index,
+    id: item.id,
+    variantId: String(item?.id),
+    productId: String(item?.productId),
+    name: item?.name,
+    quantity: item.quantity,
     variant: {
-      id: String(variant?.id),
-      sku: variant?.sku ?? '',
-      name: variant?.title!,
+      id: String(item?.id),
+      sku: item?.id ?? '',
+      name: item?.skuName,
       image: {
-        url: variant?.image?.originalSrc,
+        url: item?.imageUrls?.at3x,
       },
-      requiresShipping: variant?.requiresShipping ?? false,
-      price: variant?.priceV2?.amount,
-      listPrice: variant?.compareAtPriceV2?.amount,
+      requiresShipping: item?.requiresShipping ?? false,
+      price: formatCartPrice(item?.price),
+      listPrice: formatCartPrice(item?.listPrice),
     },
-    path: '',
+    path: item?.detailUrl?.substring(1, item?.detailUrl?.length - 1),
     discounts: [],
     options: [
       {
-        value: variant?.title,
+        value: item.skuSpecifications
+          .map((elem: any) => `${elem.fieldName}: ${elem.fieldValues}`)
+          .join(' | '),
       },
     ],
   }

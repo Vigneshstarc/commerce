@@ -9,7 +9,7 @@ import {
 
 if (!API_URL) {
   throw new Error(
-    `The environment variable NEXT_PUBLIC_VTEX_STORE_DOMAIN is missing and it's required to access your store`
+    `The environment variable NEXT_PUBLIC_VTEX_ACCOUNT is missing and it's required to access your store`
   )
 }
 
@@ -37,7 +37,7 @@ export class Config {
 }
 
 const config = new Config({
-  locale: 'en-US',
+  locale: 'en-GB',
   commerceUrl: API_URL,
   apiToken: '',
   cartCookie: VTEX_CHECKOUT_ID_COOKIE,

@@ -1,14 +1,19 @@
+import { useCallback } from 'react'
 import type { MutationHook } from '@commerce/utils/types'
 import { CommerceError } from '@commerce/utils/errors'
 import useAddItem, { UseAddItem } from '@commerce/cart/use-add-item'
 import useCart from './use-cart'
-import { Cart, CartItemBody } from '../types'
-import { checkoutLineItemAddMutation, getCheckoutId } from '../utils'
-import { checkoutToCart } from './utils'
-import { Mutation, MutationCheckoutLineItemsAddArgs } from '../schema'
-import { useCallback } from 'react'
+import {
+  checkoutLineItemAddMutation,
+  getCheckoutId,
+  checkoutToCart,
+} from '../utils'
 
-export default useAddItem as UseAddItem<typeof handler>
+import { Cart, CartItemBody } from '../types'
+
+import { Mutation, MutationCheckoutLineItemsAddArgs } from '../schema'
+
+export default (useAddItem as unknown) as UseAddItem<typeof handler>
 
 export const handler: MutationHook<Cart, {}, CartItemBody> = {
   fetchOptions: {
@@ -24,24 +29,21 @@ export const handler: MutationHook<Cart, {}, CartItemBody> = {
       })
     }
 
-    const { checkoutLineItemsAdd } = await fetch<
-      Mutation,
-      MutationCheckoutLineItemsAddArgs
-    >({
+    const data = await fetch<any, MutationCheckoutLineItemsAddArgs>({
       ...options,
       variables: {
-        checkoutId: getCheckoutId(),
-        lineItems: [
+        orderFormId: getCheckoutId(),
+        items: [
           {
-            variantId: item.variantId,
+            id: parseInt(item.variantId),
             quantity: item.quantity ?? 1,
+            seller: 1,
           },
         ],
       },
     })
-
-    // TODO: Fix this Cart type here
-    return checkoutToCart(checkoutLineItemsAdd) as any
+    let checkout = data.addToCart
+    return checkoutToCart({ checkout })
   },
   useHook: ({ fetch }) => () => {
     const { mutate } = useCart()

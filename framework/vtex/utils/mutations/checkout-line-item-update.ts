@@ -1,15 +1,9 @@
 import { checkoutDetailsFragment } from '../queries/get-checkout-query'
 
 const checkoutLineItemUpdateMutation = /* GraphQL */ `
-  mutation($checkoutId: ID!, $lineItems: [CheckoutLineItemUpdateInput!]!) {
-    checkoutLineItemsUpdate(checkoutId: $checkoutId, lineItems: $lineItems) {
-      userErrors {
-        message
-        field
-      }
-      checkout {
-        ${checkoutDetailsFragment}
-      }
+  mutation UpdateItems($orderFormId: ID, $orderItems: [ItemInput]) {
+    updateItems(orderFormId: $orderFormId, orderItems: $orderItems) @context(provider: "vtex.checkout-graphql") {
+      ${checkoutDetailsFragment}
     }
   }
 `

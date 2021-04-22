@@ -14,6 +14,7 @@ export interface Cart extends Core.Cart {
 
 export interface LineItem extends Core.LineItem {
   options: any[]
+  cartIndex: number
 }
 
 /**
@@ -28,6 +29,7 @@ export type OptionSelections = {
 export type CartItemBody = Core.CartItemBody & {
   productId: string // The product id is always required for BC
   optionSelections?: OptionSelections
+  cartIndex: number
 }
 
 export type GetCartHandlerBody = Core.GetCartHandlerBody
@@ -40,6 +42,13 @@ export type UpdateCartItemBody = Core.UpdateCartItemBody<CartItemBody>
 
 export type UpdateCartItemHandlerBody = Core.UpdateCartItemHandlerBody<CartItemBody>
 
-export type RemoveCartItemBody = Core.RemoveCartItemBody
+export type RemoveCartItemBody = Core.RemoveCartItemBody & {
+  cartIndex: number
+}
 
 export type RemoveCartItemHandlerBody = Core.RemoveCartItemHandlerBody
+
+export type RemoveItemInput = {
+  cartIndex: number
+  id: string
+}

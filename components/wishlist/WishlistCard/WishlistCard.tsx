@@ -46,6 +46,7 @@ const WishlistCard: FC<Props> = ({ product }) => {
       await addItem({
         productId: String(product.id),
         variantId: String(product.variants[0].id),
+        cartIndex: 0,
       })
       openSidebar()
       setLoading(false)

@@ -12,8 +12,8 @@ const isVtex = provider === 'vtex'
 module.exports = withCommerceConfig({
   commerce,
   i18n: {
-    locales: ['en-US', 'es'],
-    defaultLocale: 'en-US',
+    locales: ['en-GB'],
+    defaultLocale: 'en-GB',
   },
   rewrites() {
     return [

@@ -1,26 +1,26 @@
 {
-  "title": "ACME Storefront | Powered by Next.js Commerce",
-  "titleTemplate": "%s - ACME Storefront",
-  "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+  "title": "VTEX Storefront | Powered by Next.js Commerce",
+  "titleTemplate": "%s - VTEX Storefront",
+  "description": "VTEX - https://www.vtex.com",
   "openGraph": {
-    "title": "ACME Storefront | Powered by Next.js Commerce",
-    "description": "Next.js Commerce - https://www.nextjs.org/commerce",
+    "title": "VTEX Storefront | Powered by Next.js Commerce",
+    "description": "VTEX - https://www.vtex.com",
     "type": "website",
-    "locale": "en_IE",
-    "url": "https://nextjs.org/commerce",
-    "site_name": "Next.js Commerce",
+    "locale": "en_GB",
+    "url": "https://www.vtex.com",
+    "site_name": "VTEX",
     "images": [
       {
-        "url": "/card.png",
+        "url": "/card_vtex.png",
         "width": 800,
         "height": 600,
-        "alt": "Next.js Commerce"
+        "alt": "VTEX"
       }
     ]
   },
   "twitter": {
-    "handle": "@nextjs",
-    "site": "@nextjs",
+    "handle": "@vtextruecloud",
+    "site": "@vtextruecloud",
     "cardType": "summary_large_image"
   }
 }

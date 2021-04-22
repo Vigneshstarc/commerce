@@ -1,23 +1,23 @@
 import { useCallback } from 'react'
-
 import type {
   MutationHookContext,
   HookFetcherContext,
 } from '@commerce/utils/types'
-
 import { ValidationError } from '@commerce/utils/errors'
-
-import useRemoveItem, {
-  RemoveItemInput as RemoveItemInputBase,
-  UseRemoveItem,
-} from '@commerce/cart/use-remove-item'
-
+import useRemoveItem, { UseRemoveItem } from '@commerce/cart/use-remove-item'
 import useCart from './use-cart'
-import { checkoutLineItemRemoveMutation, getCheckoutId } from '../utils'
-import { checkoutToCart } from './utils'
-import { Cart, LineItem } from '../types'
+import {
+  checkoutLineItemRemoveMutation,
+  getCheckoutId,
+  checkoutToCart,
+} from '../utils'
+import {
+  Cart,
+  LineItem,
+  RemoveCartItemBody,
+  RemoveItemInput as RemoveItemInputBase,
+} from '../types'
 import { Mutation, MutationCheckoutLineItemsRemoveArgs } from '../schema'
-import { RemoveCartItemBody } from '@commerce/types'
 
 export type RemoveItemFn<T = any> = T extends LineItem
   ? (input?: RemoveItemInput<T>) => Promise<Cart | null>
@@ -34,15 +34,25 @@ export const handler = {
     query: checkoutLineItemRemoveMutation,
   },
   async fetcher({
-    input: { itemId },
+    input: { itemId, cartIndex },
     options,
     fetch,
-  }: HookFetcherContext<RemoveCartItemBody>) {
-    const data = await fetch<Mutation, MutationCheckoutLineItemsRemoveArgs>({
+  }: HookFetcherContext<any>) {
+    const data = await fetch<any, MutationCheckoutLineItemsRemoveArgs>({
       ...options,
-      variables: { checkoutId: getCheckoutId(), lineItemIds: [itemId] },
+      variables: {
+        orderFormId: getCheckoutId(),
+        orderItems: [
+          {
+            id: parseInt(itemId),
+            quantity: 0,
+            index: cartIndex,
+          },
+        ],
+      },
     })
-    return checkoutToCart(data.checkoutLineItemsRemove)
+    let checkout = data.updateItems
+    return checkoutToCart({ checkout })
   },
   useHook: ({
     fetch,
@@ -55,14 +65,15 @@ export const handler = {
     const { mutate } = useCart()
     const removeItem: RemoveItemFn<LineItem> = async (input) => {
       const itemId = input?.id ?? item?.id
+      const cartIndex = input?.cartIndex ?? item?.cartIndex
 
-      if (!itemId) {
+      if (!itemId || cartIndex == undefined) {
         throw new ValidationError({
           message: 'Invalid input used for this operation',
         })
       }
 
-      const data = await fetch({ input: { itemId } })
+      const data = await fetch({ input: { itemId, cartIndex } })
       await mutate(data, false)
       return data
     }

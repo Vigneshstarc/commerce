@@ -15,7 +15,7 @@ import { handler as useSignup } from './auth/use-signup'
 import fetcher from './fetcher'
 
 export const vtexProvider = {
-  locale: 'en-us',
+  locale: 'en-GB',
   cartCookie: VTEX_CHECKOUT_ID_COOKIE,
   storeDomain: STORE_DOMAIN,
   fetcher,

@@ -14,7 +14,7 @@ export { vtexProvider }
 export type { VtexProvider }
 
 export const vtexConfig: CommerceConfig = {
-  locale: 'en-us',
+  locale: 'en-GB',
   cartCookie: VTEX_CHECKOUT_ID_COOKIE,
 }
 
